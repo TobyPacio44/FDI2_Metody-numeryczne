@@ -3,6 +3,7 @@
 using namespace std;
 int main()
 {
+    //dt ustawić na 0.00001 dla lepszej dokładności
     double dt = 0.1;
     double h = 100;
     double g = -9.81;
