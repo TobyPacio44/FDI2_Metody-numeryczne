@@ -12,6 +12,8 @@ int main()
 
     ofstream MyFile("wyniki.txt");
 
+    MyFile << "t [s] \t \t y [m] \t \t \t vy [m/s]" << std::endl;
+    
     while (h > 0) {
         MyFile << "t = " << t << ", h = " << h << ", v = " << v << " m/s" << std::endl;
 
