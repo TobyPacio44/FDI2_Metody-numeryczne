@@ -3,6 +3,7 @@
 using namespace std;
 int main()
 {
+    //Program oblicza metodę Eulera dla obiektu rzuconego w górę
     //dt ustawić na 0.00001 dla lepszej dokładności
     double dt = 0.1;
     double h = 100;
