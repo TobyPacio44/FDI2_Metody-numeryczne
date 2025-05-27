@@ -1,0 +1,54 @@
+#include <iostream>
+#include <fstream>
+#include <cmath>
+
+const double g = 9.81;      // przyspieszenie grawitacyjne [m/s^2]
+const double m = 100.0;     // masa [kg]
+const double k = 10.0;      // stała sprężystości [N/m]
+const double dt = 0.01;     // krok czasowy [s]
+const double T = 60.0;      // czas całkowity [s]
+
+double acceleration(double y) {
+    return (-k / m) * y - g;
+}
+
+int main() {
+    double t = 0.0;
+    double y = 230.0;       // początkowe położenie [m]
+    double vy = 0.0;        // początkowa prędkość [m/s]
+
+    std::ofstream file("oscylator.csv");
+    file << "t [s],y [m],vy [m/s],Ec [J],Ek [J],Ep [J]\n";
+
+    while (t <= T) {
+        // Runge-Kutta 4. rzędu
+        double ky1 = vy * dt;
+        double kv1 = acceleration(y) * dt;
+
+        double ky2 = (vy + 0.5 * kv1) * dt;
+        double kv2 = acceleration(y + 0.5 * ky1) * dt;
+
+        double ky3 = (vy + 0.5 * kv2) * dt;
+        double kv3 = acceleration(y + 0.5 * ky2) * dt;
+
+        double ky4 = (vy + kv3) * dt;
+        double kv4 = acceleration(y + ky3) * dt;
+
+        y += (1.0 / 6.0) * (ky1 + 2 * ky2 + 2 * ky3 + ky4);
+        vy += (1.0 / 6.0) * (kv1 + 2 * kv2 + 2 * kv3 + kv4);
+
+        // Energia
+        double Ek = 0.5 * m * vy * vy;
+        double Ep = 0.5 * k * y * y + m * g * y;
+        double Ec = Ek + Ep;
+
+        // Zapis do pliku
+        file << t << "," << y << "," << vy << "," << Ec << "," << Ek << "," << Ep << "\n";
+
+        t += dt;
+    }
+
+    file.close();
+    std::cout << "Symulacja zakończona. Dane zapisane do pliku oscylator.csv\n";
+    return 0;
+}
